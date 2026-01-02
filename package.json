@@ -1,0 +1,34 @@
+{
+  "name": "md2oa",
+  "version": "1.0.0",
+  "description": "Convert Markdown to WeChat Official Account (OA) HTML format",
+  "main": "lib/index.js",
+  "bin": {
+    "md2oa": "bin/md2oa.js"
+  },
+  "scripts": {
+    "build": "node bin/md2oa.js",
+    "start": "node bin/md2oa.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "markdown",
+    "wechat",
+    "html",
+    "converter",
+    "公众号"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "gray-matter": "^4.0.3",
+    "highlight.js": "^11.9.0",
+    "juice": "^9.1.0",
+    "marked": "^11.1.1"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
