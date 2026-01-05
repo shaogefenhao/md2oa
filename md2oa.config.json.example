@@ -1,0 +1,5 @@
+{
+  "template": "wechat",
+  "outputPath": "build",
+  "outputFileName": "wechat.html"
+}

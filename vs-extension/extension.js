@@ -2,14 +2,17 @@ const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs');
 let convertMarkdownToWeChat;
+let config;
 try {
     // Prefer the converter bundled inside the extension package
     const conv = require(path.join(__dirname, 'lib', 'converter'));
     convertMarkdownToWeChat = conv.convertMarkdownToWeChat;
+    config = require(path.join(__dirname, 'lib', 'config'));
 } catch (e) {
     // Fallback to repository-level converter when running from workspace
     const conv = require('../lib/converter');
     convertMarkdownToWeChat = conv.convertMarkdownToWeChat;
+    config = require('../lib/config');
 }
 
 let outputChannel;
@@ -57,26 +60,26 @@ async function performConversion(mdFilePath) {
 
         const workspacePath = workspaceFolder.uri.fsPath;
         
+        // 加载配置
+        const userConfig = config.loadConfig(workspacePath);
+        log(`📋 配置: 使用模板 "${userConfig.template}"`);
+        
         // 在工作区根目录下创建 build 目录
-        const buildDir = path.join(workspacePath, 'build');
+        const buildDir = path.join(workspacePath, userConfig.outputPath || 'build');
         if (!fs.existsSync(buildDir)) {
             fs.mkdirSync(buildDir, { recursive: true });
         }
 
-        // 查找 template.html（优先级：扩展内置 -> 项目根目录 -> vs-extension 目录）
-        let templatePath = path.join(__dirname, 'template.html');
-        if (!fs.existsSync(templatePath)) {
-            templatePath = path.join(workspacePath, 'template.html');
-        }
-        if (!fs.existsSync(templatePath)) {
-            templatePath = path.join(workspacePath, 'vs-extension', 'template.html');
-        }
-        if (!fs.existsSync(templatePath)) {
-            vscode.window.showErrorMessage('找不到 template.html 文件');
+        // 查找模板（优先级：自定义 -> 扩展内置 -> 项目根 -> 扩展 -> 默认）
+        let templatePath = config.getTemplatePath(userConfig.template, workspacePath, __dirname);
+        if (!templatePath) {
+            vscode.window.showErrorMessage(`找不到模板: ${userConfig.template}`);
+            log(`❌ 模板文件未找到: ${userConfig.template}`);
             return;
         }
+        log(`📝 模板路径: ${templatePath}`);
 
-        const outputPath = path.join(buildDir, 'wechat.html');
+        const outputPath = path.join(buildDir, userConfig.outputFileName || 'wechat.html');
 
         log('🔄 处理图片...');
         log('🎨 美化代码块...');

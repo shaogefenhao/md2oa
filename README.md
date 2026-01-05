@@ -111,9 +111,111 @@ vsce package
 
 参考 [VS Code 官方文档](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
 
+## 内置模板
+
+项目包含 4 个内置模板，可根据需要选择：
+
+- **wechat** - 微信公众号官方风格（推荐）
+- **default** - GitHub 风格，简洁专业
+- **dark** - 暗色主题，适合代码密集
+- **minimal** - 极简风格，复古排版
+
+## 配置与自定义
+
+### 1. 配置文件支持
+
+在项目根目录创建 `md2oa.config.json` 来自定义设置：
+
+```json
+{
+  "template": "wechat",
+  "outputPath": "build",
+  "outputFileName": "wechat.html"
+}
+```
+
+**配置选项说明：**
+
+| 选项 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `template` | string | `wechat` | 使用的模板名称 |
+| `outputPath` | string | `build` | 输出目录 |
+| `outputFileName` | string | `wechat.html` | 输出文件名 |
+
+### 2. 使用指定模板
+
+**命令行方式：**
+
+```bash
+# 使用 dark 模板转换
+node build.js example/sample.md dark
+
+# 使用 minimal 模板转换
+node build.js example/sample.md minimal
+```
+
+**VS Code 插件：**
+
+在 `md2oa.config.json` 中指定 `template` 字段，插件会自动使用该模板。
+
+### 3. 自定义模板
+
+#### 方式 A：在工作区中创建模板
+
+在项目根目录下创建 `templates/` 文件夹，添加自定义模板：
+
+```
+project-root/
+├── templates/
+│   ├── custom.html        # 你的自定义模板
+│   └── another-style.html # 另一个模板
+├── md2oa.config.json      # 配置：使用 custom
+└── example.md
+```
+
+在 `md2oa.config.json` 中使用：
+
+```json
+{
+  "template": "custom"
+}
+```
+
+#### 方式 B：修改默认模板
+
+编辑项目中的 `template.html` 或 `vs-extension/template.html` 来修改样式。`{{body}}` 占位符标记内容插入位置：
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        /* 在这里添加你的自定义样式 */
+        body {
+            font-family: 'Your Font', sans-serif;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+{{body}}
+</body>
+</html>
+```
+
+### 4. 模板优先级
+
+扩展在查找模板时遵循以下优先级（从高到低）：
+
+1. **工作区自定义模板** - `{workspace}/templates/{template-name}.html`
+2. **扩展内置模板** - 插件内置的标准模板
+3. **项目根模板** - `{workspace}/template.html`（向后兼容）
+4. **扩展模板** - 扩展目录中的 `template.html`（向后兼容）
+
 ## 自定义模板
 
-编辑 `template.html` 来自定义样式。`{{body}}` 占位符标记内容插入位置：
+编辑模板文件来自定义样式。使用 `{{body}}` 占位符标记内容插入位置：
 
 ```html
 <!DOCTYPE html>
