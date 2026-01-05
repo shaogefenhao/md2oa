@@ -138,6 +138,14 @@ vsce package
 - **juice** - CSS 内联处理
 - **gray-matter** - 前置元数据解析器
 
+## GitHub 仓库
+
+本项目开源托管在 GitHub：
+
+[shaogefenhao/md2oa](https://github.com/shaogefenhao/md2oa)
+
+欢迎提交 Issue、Pull Request 或 Star ⭐
+
 ## 许可证
 
 MIT

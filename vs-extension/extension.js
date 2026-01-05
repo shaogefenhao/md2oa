@@ -1,7 +1,16 @@
 const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs');
-const { convertMarkdownToWeChat } = require('../lib/converter');
+let convertMarkdownToWeChat;
+try {
+    // Prefer the converter bundled inside the extension package
+    const conv = require(path.join(__dirname, 'lib', 'converter'));
+    convertMarkdownToWeChat = conv.convertMarkdownToWeChat;
+} catch (e) {
+    // Fallback to repository-level converter when running from workspace
+    const conv = require('../lib/converter');
+    convertMarkdownToWeChat = conv.convertMarkdownToWeChat;
+}
 
 let outputChannel;
 
@@ -54,8 +63,11 @@ async function performConversion(mdFilePath) {
             fs.mkdirSync(buildDir, { recursive: true });
         }
 
-        // 查找 template.html（在项目根目录或 vs-extension 目录）
-        let templatePath = path.join(workspacePath, 'template.html');
+        // 查找 template.html（优先级：扩展内置 -> 项目根目录 -> vs-extension 目录）
+        let templatePath = path.join(__dirname, 'template.html');
+        if (!fs.existsSync(templatePath)) {
+            templatePath = path.join(workspacePath, 'template.html');
+        }
         if (!fs.existsSync(templatePath)) {
             templatePath = path.join(workspacePath, 'vs-extension', 'template.html');
         }
