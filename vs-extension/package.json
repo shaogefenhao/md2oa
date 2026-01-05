@@ -24,7 +24,6 @@
     "url": "https://github.com/shaogefenhao/md2oa.git"
   },
   "main": "./extension.js",
-  "files": ["extension/**", "lib/**", "README.md", "LICENSE", "template.html"],
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
     "gray-matter": "^4.0.3",

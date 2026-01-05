@@ -8,7 +8,7 @@
     "start": "node build.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "vscode:prepublish": "npm run package-extension",
-    "package-extension": "cd vs-extension && vsce package --out ../build/md2oa.vsix"
+    "package-extension": "cp README.md vs-extension/README.md && cd vs-extension && vsce package --out ../build/md2oa.vsix"
   },
   "keywords": [
     "markdown",
