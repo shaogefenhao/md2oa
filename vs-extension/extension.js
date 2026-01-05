@@ -131,6 +131,9 @@ async function convertFromExplorer(uri) {
 function activate(context) {
     console.log('md2oa 插件已激活');
 
+    // 创建输出通道
+    outputChannel = vscode.window.createOutputChannel('md2oa');
+
     // 命令：从编辑器转换
     const convertCommand = vscode.commands.registerCommand(
         'md2oa.convert',
