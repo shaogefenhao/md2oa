@@ -13,3 +13,5 @@ yarn-error.log*
 .env
 .env.local
 config.json
+*.vsix
+.tmp/

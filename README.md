@@ -4,6 +4,8 @@
 
 无需图床、本地运行、AI 友好。
 
+**现已支持 VS Code 插件！** 🎉
+
 ## 功能特性
 
 - ✨ 将 Markdown 转换为 HTML，本地运行无网络依赖
@@ -11,6 +13,7 @@
 - 🎨  代码块语法高亮，macOS 风格装饰
 - 📱  内联 CSS 样式，完美兼容微信
 - 📝  简洁直观的 API
+- 🔌 **VS Code 插件支持**（快捷键、右键菜单、命令面板）
 
 ## 安装
 
@@ -22,7 +25,7 @@ npm install
 
 ## 快速开始
 
-### 命令行使用
+### 方式 1: 命令行使用
 
 ```bash
 # 转换 markdown 文件
@@ -31,13 +34,28 @@ node build.js example/sample.md
 # 输出: build/wechat.html
 ```
 
-### Node.js API 使用
+### 方式 2: VS Code 插件使用
+
+1. 打开任意 `.md` 文件
+2. 使用以下任一方式：
+   - **快捷键**: `Cmd+Shift+M`（macOS）/ `Ctrl+Shift+M`（Windows/Linux）
+   - **编辑器标题栏**: 点击"Convert to WeChat OA HTML"按钮
+   - **文件浏览器右键**: 选择"Convert to WeChat OA HTML"
+   - **命令面板**: `Cmd+Shift+P` / `Ctrl+Shift+P` → 输入 "md2oa"
+
+3. 转换完成后，可选择打开输出文件
+
+### 方式 3: Node.js API 使用
 
 ```javascript
-const { build } = require('./build');
+const { convertMarkdownToWeChat } = require('./lib/converter');
 
 // 转换 markdown 文件
-build('example/sample.md');
+convertMarkdownToWeChat(
+  'example/sample.md',
+  'template.html',
+  'build/wechat.html'
+);
 ```
 
 ## 工作原理
@@ -53,14 +71,45 @@ build('example/sample.md');
 
 ```
 md2oa/
-├── build.js              # 主脚本
-├── template.html         # HTML 模板
+├── build.js                    # 命令行入口
+├── lib/
+│   └── converter.js           # 核心转换逻辑
+├── template.html              # HTML 模板
+├── vs-extension/              # VS Code 插件
+│   ├── extension.js           # 插件主文件
+│   ├── package.json           # 插件清单
+│   ├── template.html          # 插件模板副本
+│   └── README.md              # 插件文档
 ├── example/
-│   ├── sample.md        # 示例 markdown
-│   └── sample-image.svg # 示例图片
+│   ├── sample.md             # 示例 markdown
+│   └── sample-image.svg      # 示例图片
 └── build/
-    └── wechat.html      # 生成输出
+    └── wechat.html           # 生成输出
 ```
+
+## VS Code 插件开发
+
+### 本地测试
+
+```bash
+# 在 vs-extension 目录中
+code --extensionDevelopmentPath=. ..
+```
+
+### 打包扩展
+
+```bash
+# 安装 vsce
+npm install -g @vscode/vsce
+
+# 打包
+cd vs-extension
+vsce package
+```
+
+### 发布到 VS Code Marketplace
+
+参考 [VS Code 官方文档](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
 
 ## 自定义模板
 
@@ -88,11 +137,6 @@ md2oa/
 - **highlight.js** - 代码语法高亮
 - **juice** - CSS 内联处理
 - **gray-matter** - 前置元数据解析器
-
-## TODO
-
-- 更多的模版
-- VS Code 插件，更方便
 
 ## 许可证
 

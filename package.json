@@ -2,14 +2,13 @@
   "name": "md2oa",
   "version": "1.0.0",
   "description": "Convert Markdown to WeChat Official Account (OA) HTML format",
-  "main": "lib/index.js",
-  "bin": {
-    "md2oa": "bin/md2oa.js"
-  },
+  "main": "build.js",
   "scripts": {
-    "build": "node bin/md2oa.js",
-    "start": "node bin/md2oa.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node build.js",
+    "start": "node build.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vscode:prepublish": "npm run package-extension",
+    "package-extension": "cd vs-extension && vsce package --out ../build/md2oa.vsix"
   },
   "keywords": [
     "markdown",
@@ -18,8 +17,12 @@
     "converter",
     "公众号"
   ],
-  "author": "",
+  "author": "shaogefenhao",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shaogefenhao/md2oa.git"
+  },
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
     "gray-matter": "^4.0.3",
@@ -27,8 +30,12 @@
     "juice": "^9.1.0",
     "marked": "^11.1.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@vscode/vsce": "^2.21.0",
+    "vscode": "^1.1.37"
+  },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14.0.0",
+    "vscode": "^1.75.0"
   }
 }

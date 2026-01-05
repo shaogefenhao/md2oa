@@ -1,0 +1,10 @@
+.git
+.gitignore
+.DS_Store
+node_modules
+npm-debug.log
+yarn-error.log
+build
+example
+lib
+*.js.map

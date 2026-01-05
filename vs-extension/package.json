@@ -1,0 +1,75 @@
+{
+  "name": "md2oa",
+  "displayName": "Markdown to WeChat OA",
+  "description": "Convert Markdown to WeChat Official Account (公众号) compatible HTML",
+  "version": "1.0.0",
+  "publisher": "shaogefenhao",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Other",
+    "Formatters"
+  ],
+  "keywords": [
+    "markdown",
+    "wechat",
+    "html",
+    "converter",
+    "公众号"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shaogefenhao/md2oa.git"
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onCommand:md2oa.convert",
+    "onCommand:md2oa.convertFile"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "md2oa.convert",
+        "title": "Convert to WeChat OA HTML",
+        "category": "md2oa"
+      },
+      {
+        "command": "md2oa.convertFile",
+        "title": "Convert to WeChat OA HTML",
+        "category": "md2oa"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "md2oa.convert",
+          "when": "resourceLangId == markdown",
+          "group": "1_modification"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "md2oa.convertFile",
+          "when": "resourceExtname == .md",
+          "group": "1_modification"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "md2oa.convert",
+        "key": "cmd+shift+m",
+        "mac": "cmd+shift+m",
+        "when": "resourceLangId == markdown"
+      }
+    ]
+  },
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#FFE4E1",
+    "theme": "light"
+  }
+}
