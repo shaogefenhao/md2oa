@@ -129,26 +129,39 @@ async function convertFromExplorer(uri) {
  * 扩展激活时调用
  */
 function activate(context) {
-    console.log('md2oa 插件已激活');
+    console.log('🚀 md2oa 插件正在激活...');
 
     // 创建输出通道
     outputChannel = vscode.window.createOutputChannel('md2oa');
+    log('✅ 输出通道已创建');
 
-    // 命令：从编辑器转换
-    const convertCommand = vscode.commands.registerCommand(
-        'md2oa.convert',
-        convertFromEditor
-    );
+    try {
+        // 命令：从编辑器转换
+        console.log('📝 注册命令: md2oa.convert');
+        const convertCommand = vscode.commands.registerCommand(
+            'md2oa.convert',
+            convertFromEditor
+        );
+        log('✅ 命令已注册: md2oa.convert');
 
-    // 命令：从文件浏览器转换
-    const convertExplorerCommand = vscode.commands.registerCommand(
-        'md2oa.convertFile',
-        convertFromExplorer
-    );
+        // 命令：从文件浏览器转换
+        console.log('📝 注册命令: md2oa.convertFile');
+        const convertExplorerCommand = vscode.commands.registerCommand(
+            'md2oa.convertFile',
+            convertFromExplorer
+        );
+        log('✅ 命令已注册: md2oa.convertFile');
 
-    context.subscriptions.push(convertCommand, convertExplorerCommand);
-
-    log('✅ md2oa 插件已加载');
+        // 订阅命令
+        context.subscriptions.push(convertCommand);
+        context.subscriptions.push(convertExplorerCommand);
+        
+        log('✅ md2oa 插件已完全加载');
+        console.log('✅ md2oa 插件已完全加载');
+    } catch (error) {
+        console.error('❌ 插件激活失败:', error);
+        log('❌ 插件激活失败: ' + error.message);
+    }
 }
 
 /**
