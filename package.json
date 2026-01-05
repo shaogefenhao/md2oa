@@ -31,7 +31,7 @@
     "marked": "^11.1.1"
   },
   "devDependencies": {
-    "@vscode/vsce": "^2.21.0",
+    "@vscode/vsce": "^2.32.0",
     "vscode": "^1.1.37"
   },
   "engines": {
