@@ -92,37 +92,48 @@ async function performConversion(mdFilePath) {
 }
 
 /**
- * 从编辑器转换
+ * 统一的转换命令处理器
+ * 支持从编辑器和文件浏览器调用
  */
-async function convertFromEditor() {
-    const document = getCurrentMarkdownFile();
-    if (!document) {
-        return;
+async function handleConvert(uri) {
+    try {
+        let mdFilePath;
+
+        // 如果提供了 URI（来自右键菜单），直接使用
+        if (uri && uri.fsPath) {
+            // 验证是否是 Markdown 文件
+            if (!uri.fsPath.endsWith('.md')) {
+                vscode.window.showErrorMessage('请选择 Markdown 文件 (.md)');
+                return;
+            }
+            mdFilePath = uri.fsPath;
+        } else {
+            // 否则从当前编辑器获取
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                vscode.window.showErrorMessage('请先打开一个 Markdown 文件');
+                return;
+            }
+
+            const document = editor.document;
+            if (document.languageId !== 'markdown') {
+                vscode.window.showErrorMessage('当前文件不是 Markdown 格式，请打开 .md 文件');
+                return;
+            }
+
+            // 保存文件
+            if (document.isDirty) {
+                await document.save();
+            }
+
+            mdFilePath = document.uri.fsPath;
+        }
+
+        await performConversion(mdFilePath);
+    } catch (error) {
+        console.error('转换错误:', error);
+        vscode.window.showErrorMessage('转换失败: ' + error.message);
     }
-
-    // 保存文件
-    if (document.isDirty) {
-        await document.save();
-    }
-
-    await performConversion(document.uri.fsPath);
-}
-
-/**
- * 从文件浏览器右键菜单转换
- */
-async function convertFromExplorer(uri) {
-    if (!uri) {
-        vscode.window.showErrorMessage('无法获取文件路径');
-        return;
-    }
-
-    if (!uri.fsPath.endsWith('.md')) {
-        vscode.window.showErrorMessage('请选择 Markdown 文件 (.md)');
-        return;
-    }
-
-    await performConversion(uri.fsPath);
 }
 
 /**
@@ -136,25 +147,16 @@ function activate(context) {
     log('✅ 输出通道已创建');
 
     try {
-        // 命令：从编辑器转换
+        // 注册统一的转换命令
         console.log('📝 注册命令: md2oa.convert');
         const convertCommand = vscode.commands.registerCommand(
             'md2oa.convert',
-            convertFromEditor
+            handleConvert
         );
         log('✅ 命令已注册: md2oa.convert');
 
-        // 命令：从文件浏览器转换
-        console.log('📝 注册命令: md2oa.convertFile');
-        const convertExplorerCommand = vscode.commands.registerCommand(
-            'md2oa.convertFile',
-            convertFromExplorer
-        );
-        log('✅ 命令已注册: md2oa.convertFile');
-
         // 订阅命令
         context.subscriptions.push(convertCommand);
-        context.subscriptions.push(convertExplorerCommand);
         
         log('✅ md2oa 插件已完全加载');
         console.log('✅ md2oa 插件已完全加载');

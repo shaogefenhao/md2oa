@@ -26,18 +26,12 @@
   "main": "./extension.js",
   "activationEvents": [
     "onLanguage:markdown",
-    "onCommand:md2oa.convert",
-    "onCommand:md2oa.convertFile"
+    "onCommand:md2oa.convert"
   ],
   "contributes": {
     "commands": [
       {
         "command": "md2oa.convert",
-        "title": "Convert to WeChat OA HTML",
-        "category": "md2oa"
-      },
-      {
-        "command": "md2oa.convertFile",
         "title": "Convert to WeChat OA HTML",
         "category": "md2oa"
       }
@@ -52,7 +46,7 @@
       ],
       "explorer/context": [
         {
-          "command": "md2oa.convertFile",
+          "command": "md2oa.convert",
           "when": "resourceExtname == .md",
           "group": "1_modification"
         }
